@@ -3,6 +3,11 @@ This is a choose your own adventure game where the player can pick who they want
 
 
 ## How to install
+Unzip the folder and make sure you have the Java Coding Pack installed- if you don't, that executable is included in this set of files. Download that, and simply run FirstFantasy.iml in 
+your favorite IDE. 
+
+After that, click into Main.java and hit run to start the game. Type answers when prompted. e.g. Enter your name: Sam
+
 
 
 ## Current Features
