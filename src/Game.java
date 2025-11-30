@@ -14,6 +14,7 @@ public class Game {
         dialog.guildHall(player);
         lockpickMinigame("easy");
         dialog.guildPrologue(player);
+        dialog.firstQuest(player);
         scnr.close();
     }
     public void createCharacter() {  //Gathers information of the player character

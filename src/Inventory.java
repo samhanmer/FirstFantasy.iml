@@ -12,7 +12,18 @@ public class Inventory {
     }
 
     public void printInventory() {  //planning on implementing soon!
-        System.out.println("Backpack:");
-        item.forEach((key, value) ->System.out.println(key + ": " + value));
+        if (item.isEmpty()) {
+            System.out.println("Your inventory is empty.");
+            return;
+        }
+
+        System.out.println("|_-_=INVENTORY=_-_|");
+        item.forEach((key, value) -> {
+            System.out.println("- " + key + ": " + value);
+        });
+        System.out.println("|-_______________-|");
+        }
+
+
     }
-}
+

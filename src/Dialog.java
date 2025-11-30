@@ -3,13 +3,34 @@ import java.util.Scanner;
 
 public class Dialog {
     private Scanner scnr;
+    private Character currentCharacter;
 
     public Dialog(Scanner scnr) {
         this.scnr = scnr;
     }
 
+    public void setCharacter(Character c) {
+        this.currentCharacter = c;
+    }
+    private int dialogChoice() {
+        while(!scnr.hasNextInt()) {
+            System.out.println("Enter a number: ");
+            scnr.next();
+        }
+
+        int choice = scnr.nextInt();
+
+        if (choice == -1) {
+            currentCharacter.getInventory().printInventory();
+        }
+
+        return choice;
+    }
+
 
     public void guildHall(Character c) {
+        setCharacter(c);
+        System.out.println("Type -1 to open your inventory");
         if (c.getClassName().equalsIgnoreCase("thief")) {
             System.out.println("You're forcefully brought to the guild. Citizens point at you as you walk by. Your chains rattle with every step.\n" + "The guard who never introduced himself pushes you through the guild doors- still with shackles around your arms and legs.");
             System.out.println("The woman at the receptionist desk looks at you wearily- notably moving a gold pouch out of your view.");
@@ -37,14 +58,12 @@ public class Dialog {
         }
         System.out.println("\n9. 'I would like to join the guild.'");
 
-        int option = -1;
-        int choice = -1;
+        int option = -2;
 
         while (option != 9) {
-            choice = scnr.nextInt();
-            option = choice;
+            option = dialogChoice();
 
-            switch (choice) {
+            switch (option) {
                 case 1:
                     System.out.println("\n1. 'There's not much history here yet, wanderer. The guild was formed only a couple months ago- our leader is a skilled adventurer regarded as a hero- however he's not been seen since we opened up!'");
                     break;
@@ -75,6 +94,7 @@ public class Dialog {
     }
 
     public void guildPrologue(Character c) {
+        setCharacter(c);
         if (c.getClassName().equalsIgnoreCase("barbarian")) {
             System.out.println("'By the gods...! You know... I really should've expected this. Here, take this copper amulet- that is your rank in the guild now.");
         } else if (c.getClassName().equalsIgnoreCase("thief")) {
@@ -91,14 +111,12 @@ public class Dialog {
             System.out.println("4. [BARBARIAN]: CHUG. ALE.");
         }
         System.out.println("9. Inspect the Questboard [END OF THIS VERSION]");
-        int option = -1;
-        int choice = -1;
+        int option = -2;
 
         while (option != 9) {
-            choice = scnr.nextInt();
-            option = choice;
+            option = dialogChoice();
 
-            switch (choice) {
+            switch (option) {
                 case 1:
                     if (c.getClassName().equalsIgnoreCase("templar")) {
                         System.out.println("\n[TEMPLAR]: *Agnis looks up at you as you approach her table* 'Why look who it is! Been awhile since I've seen you " + c.getName() + " I heard you'd be here eventually.\n" + " ");
@@ -127,7 +145,7 @@ public class Dialog {
                 }
                 break;
                 case 9:
-                    System.out.println("*You inspect the Questboard- ~WORK IN PROGRESS, END OF BUILD~*");
+                    System.out.println("*You inspect the Questboard, noticing only one quest. Something about scouting the forest for signs of monsters. You accept this quest.");
                     break;
                 default: System.out.println("Invalid input, try again.");
                 break;
@@ -135,4 +153,35 @@ public class Dialog {
 
         }
     }
+    public void firstQuest(Character c) {
+        setCharacter(c);
+        System.out.println("You hand the receptionist the paper to accept your quest.");
+        System.out.println("'Remember, this is not a combat quest. Report any strange sightings or dangerous creatures- but stay out of harms way.' She says in a serious tone.");
+        if (c.getClassName().equalsIgnoreCase("ranger")) {
+            System.out.println("[RANGER]: You think to yourself that there's most certainly a demonic being in the forest. Best be cautious.");
+        }
+
+        System.out.println("You give one last glance at the city as you wander out of the gates before entering the forest.");
+        System.out.println("As you enter the deep woods, an uneasy feeling washes over you.\n");
+        if (c.getClassName().equalsIgnoreCase("barbarian")) {
+            System.out.println("[BARBARIAN]: The hairs on your neck stand up- your instincts never fail you. Something is *hunting* you- worse is you can tell it's a fight you would lose.");
+        }
+        if (c.getClassName().equalsIgnoreCase("templar")) {
+            System.out.println("[TEMPLAR]: You feel a darkness cling to you. This is something you've only read about... a strong demonic being is nearby.");
+        }
+        System.out.println("You hear a twig snap behind you. When you turn to face it- a hulking behemoth of a creature stands before you. Large muscular body, spiked infernal armor, giant horns, easily over 10 feet tall... A powerful demon.");
+        System.out.println("It says something in tongues you do not comprehend. You notice that this demon is holding something small and shiny, almost magical in it's left hand...\n");
+        if (c.getClassName().equalsIgnoreCase("wizard")) {
+            System.out.println("[WIZARD]: You recognize that gemstone... it's a magical object said to have unlimited potential... but only teachers at your school receive these. Magic is highly regulated. Something strange is going on.");
+        }
+        if (c.getClassName().equalsIgnoreCase("Alchemist")) {
+            System.out.println("[ALCHEMIST]: From your understanding this is a magical object you've seen professors at the magic college use. It seems to have a lot of uses- but can be used in potion crafting.");
+        }
+
+        System.out.println("Suddenly you feel a splitting headache- a voice infiltrates your mind. 'LEAVE, WILL NOT ASK TWICE.' It rattles every bone in your body.");
+        System.out.println("You leave the forest in a hurry. That creature was far more than you could handle in your current state. You make it back into town without further incident.");
+        System.out.println("You report your encounter to the guild, and the receptionist shushes you to make you lower your tone so no one overhears.");
+        System.out.println("'Something most dreadful is happening...' She says, her brows furrowing. It seems like work here will be much different than expected.");
+    }
 }
+
