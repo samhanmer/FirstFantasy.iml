@@ -13,13 +13,15 @@ After that, hit the run button and enjoy! Type answers when prompted. e.g. Enter
 - Lockpicking minigame with unique class interaction and difficulty levels for future use
 - Functional inventory system that keeps track of names and quantities
 - Can inspect your inventory during dialog scenes by entering -1. This uses recursion
+- Fully functional GUI system
 
 ## Future Improvements
-For the future there are a few aspects I want to improve. The largest one being DIALOG. It isn't following DRY (Don't Repeat Yourself!)
-This is something I want to fix eventually as it will allow me to make more immersive and branching dialog trees without taking so much space.
+- I want to add try catch statements to ensure proper user input.
+- I want to make the GUI look less default.
+- Lockpick minigame needs to be implemented again. I really tried for hours and hours to get this in the event flow- but it got to the point where I needed to move on and turn in a completed product with or without it. (It looks good, just doesn't fit in my event flow yet)
+- Dialog system is clunky and doesn't fully work as intended. It was fun to experiment with it, but will require major patching going forward.
 
-Story wise I was too ambitious. I plan to go for more of an epilogue style opening rather than finishing the entire plot. 
+## Comments About my Assignment
+This project took me the longest out of all of them. I watch a lot of extra videos on JavaFX and had quite the difficult time figuring it out- but I'm happy with how it turned out!
+Lockpick minigame is going to keep me up at night until I fully figure it out. GUI looks good, but I can't run it and keep things moving properly at this juncture.
 
-## Questions Outside of Assignment
-
-N/A

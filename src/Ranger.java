@@ -12,11 +12,16 @@ public class Ranger extends Job {
     }
 
     @Override
-    public void printOriginStory(Character c) {
-        System.out.println(c.getName() + " has enjoyed a life of solitude among nature. The woods have given " + c.getProObj() + " all " + c.getProSubj() + " could ever need.");
-        System.out.println("One day however, something interrupted that peace and tranquility. Birds left much earlier than they should've, deer ran up into wolf infested mountains... something is causing a disturbance.");
-        System.out.println(c.getName() + " decides to investigate, and figures out there's a good reason for the animals to leave. Tracks of a demon. A big one.");
-        System.out.println("The demon tracks indicate that it's far too big for" + c.getProObj() + " to take alone. " + c.getAge() + " knows " + c.getProSubj() + " has to go to Lindhelm to find help.");
+    public void printOriginStory(Character c, DialogGui gui, Dialog dialog) {
+        gui.print(c.getName() + " has enjoyed a life of solitude among nature. The woods have given " + c.getProObj() + " all " + c.getProSubj() + " could ever need.");
+        gui.print("One day however, something interrupted that peace and tranquility. Birds left much earlier than they should've, deer ran up into wolf infested mountains... something is causing a disturbance.");
+        gui.print(c.getName() + " decides to investigate, and figures out there's a good reason for the animals to leave. Tracks of a demon. A big one.");
+        gui.print("The demon tracks indicate that it's far too big for" + c.getProObj() + " to take alone. " + c.getName() + " knows " + c.getProSubj() + " has to go to Lindhelm to find help.");
+
+        gui.addChoice("Go to the Guildhall", () -> {
+            dialog.guildHall(c);
+        });
+        gui.show();
     }
 
 }

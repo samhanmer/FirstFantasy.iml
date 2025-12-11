@@ -1,21 +1,39 @@
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import java.util.Random;
-import java.util.Scanner;
 
 public class LockpickMinigame {
     private Random rand = new Random();
-    private Scanner scnr;
+    private int lockpicks;
 
-    public boolean play(Scanner in, Inventory inventory, String lockpickName, String playerClass, String difficulty) {
+    public void pickMinigame(Stage stage, Character player, String difficulty) {
+
+        Inventory inventory = player.getInventory();
+        lockpicks = inventory.getQuantity("Lockpick");
+        String playerClass = player.getPlayerClass().getClass().getSimpleName();
+
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(20));
+
+        Label description = new Label("You approach a locked chest.");
+        Label resultLabel = new Label();
 
 
-        if (playerClass.equalsIgnoreCase("thief") && inventory.getQuantity("Lockpick") > 0) {  //Thief will always succeed picking locks as long as they have at least 1 pick.
-            System.out.println("[THIEF]: You masterfully pick the lock with little effort.");
-            return true;
-        } else if (playerClass.equalsIgnoreCase("barbarian")) { //Barbarians will always defeat the chest
-            System.out.println("[BARBARIAN]: You raise your greataxe and smash it into the chest, shattering it open!");
-            System.out.println("[BARBARIAN]: No one can lock anything in this chest anymore.");
-            return true;
+        if (playerClass.equalsIgnoreCase("thief") && inventory.getQuantity("Lockpick") > 0) {
+            resultLabel.setText("[THIEF]: You masterfully pick the lock.");
+            vbox.getChildren().addAll(description, resultLabel);
+            stage.setScene(new Scene(vbox));
+            return;
         }
+     if (playerClass.equalsIgnoreCase("barbarian")) {
+        resultLabel.setText(" [BARBARIAN]: You smash the chest open! No one can lock anything inside it anymore.");
+        vbox.getChildren().addAll(description, resultLabel);
+        stage.setScene(new Scene(vbox));
+        return;
+    }
 
         //Determines how challenging the lock will be
         int maxNumber;
@@ -33,38 +51,46 @@ public class LockpickMinigame {
         }
 
         int code = rand.nextInt(maxNumber) + 1;
-        int lockpicks = inventory.getQuantity(lockpickName);
 
         if (lockpicks <= 0) {
-            System.out.println("You're out of lockpicks.");
-            return false;
+            resultLabel.setText("You're out of lockpicks.");
+            vbox.getChildren().addAll(description, resultLabel);
+            stage.setScene(new Scene(vbox));
+            return;
         }
+        //GUI menu for minigame
+        Label difficultyLabel = new Label("Difficulty: " + difficulty.toUpperCase() + " (Guess 1–" + maxNumber + ")");
+        Label attemptsLabel = new Label("You have " + lockpicks + " attempts.");
 
-        System.out.println("You start to use your lockpick...");
-        System.out.println("Difficulty: " + difficulty.toUpperCase() + " (" + maxNumber + " possible numbers)");
-        System.out.println("You have " + lockpicks + " lockpick" + (lockpicks > 1 ? "s." : "."));
+        TextField guessField = new TextField();
+        guessField.setPromptText("Enter your guess");
 
-        // --- Lockpick guessing loop ---
-        for (int i = 0; i < lockpicks; i++) {
-            System.out.print("Enter your guess (1-" + maxNumber + "): ");
-            int guess = in.nextInt();
+        Button guessButton = new Button("Try Lockpick");
 
+        guessButton.setOnAction(e -> {
+            int guess = Integer.parseInt(guessField.getText());
+            lockpicks--;
+            // --- Lockpick guessing loop ---
             if (guess == code) {
-                System.out.println("The lock clicks- you're in.");
-                return true;
+                resultLabel.setText("The lock clicks open — success!");
+                return;
             } else if (guess < code) {
-                System.out.println("Too low...");
+                resultLabel.setText("Too low...");
             } else {
-                System.out.println("Too high.");
+                resultLabel.setText("Too high...");
             }
 
-            if (i == lockpicks - 1) {
-                System.out.println("You're out of lockpicks!");
-                inventory.addItem(lockpickName, -lockpicks); // remove all lockpicks used
-            }
-        }
+            attemptsLabel.setText("Lockpicks remaining: " + lockpicks);
 
-        return false;
+            if (lockpicks <= 0) {
+                resultLabel.setText("You're out of lockpicks! The chest remains locked.");
+                inventory.addItem("Lockpick", -inventory.getQuantity("Lockpick"));
+                guessButton.setDisable(true);
+                return;
+            }
+        });
+        vbox.getChildren().addAll(description, difficultyLabel, attemptsLabel, guessField, guessButton, resultLabel);
+        stage.setScene(new Scene(vbox));
     }
 }
 

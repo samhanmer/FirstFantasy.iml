@@ -1,73 +1,103 @@
-import java.util.Scanner;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+import javafx.geometry.Insets;
+
 
 
 public class Game {
     private Character player;
-    private Scanner scnr = new Scanner(System.in);
+    private Stage stage;
+    private DialogGui dialogGui;
     private Dialog dialog;
+
+    public Game(Stage stage) {
+        this.stage = stage;
+        this.dialogGui = new DialogGui(stage);
+        this.dialog = new Dialog(dialogGui, this);
+    }
 
 
     public void start() {   //Coordinates the scenes
-        dialog = new Dialog(scnr); //Scnr lives here, and is used in other files when needed
         createCharacter();
-        chooseClass();
-        dialog.guildHall(player);
-        lockpickMinigame("easy");
-        dialog.guildPrologue(player);
-        dialog.firstQuest(player);
-        scnr.close();
     }
-    public void createCharacter() {  //Gathers information of the player character
-        System.out.print("Enter your character's name: ");
-        String name = scnr.nextLine();                      // e.g. Sam
 
-        System.out.print("Choose a pronoun subject (he/she/they): ");
-        String proSubj = scnr.next().toLowerCase();         // e.g., he / she / they
+    private void createCharacter() {  //Gathers information of the player character
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(20));
 
-        System.out.print("Choose a pronoun object (him/her/them): ");
-        String proObj = scnr.next().toLowerCase();          // e.g., him / her / them
+        Label headerLabel = new Label("Player Identification");
+        TextField nameField = new TextField();
+        nameField.setPromptText("Enter your character's name");
 
-        System.out.print("Choose a possessive adjective (his/her/their): ");
-        String proPossAdj = scnr.next().toLowerCase();      // e.g., his / her / their
+        TextField proSubjField = new TextField();
+        proSubjField.setPromptText("Enter your Subjective pronoun (he/she/they)");
 
-        System.out.print("Enter your character's age: ");
-        int age = scnr.nextInt();                           //e.g. 55
+        TextField proObjField = new TextField();
+        proObjField.setPromptText("Enter your Objective pronoun (him/her/them)");
 
-        player = new Character(name, proSubj, proObj, proPossAdj, age);
+        TextField proPossAdjField = new TextField();
+        proPossAdjField.setPromptText("Enter your Possessive Adjective (his/her/their)");
+
+        TextField ageField = new TextField();
+        ageField.setPromptText("Enter your Age");
+
+        Button submitButton = new Button("Create Character");
+
+        submitButton.setOnAction(e -> {
+            String name = nameField.getText();
+            String proSubj = proSubjField.getText();
+            String proObj = proObjField.getText();
+            String proPossAdj = proPossAdjField.getText();
+            String ageString = ageField.getText();
+            int age = Integer.parseInt(ageString);
+
+
+            player = new Character(name, proSubj, proObj, proPossAdj, age);
+            chooseClass();
+        });
+
+        vbox.getChildren().addAll(headerLabel, nameField, proSubjField, proObjField, proPossAdjField, ageField, submitButton);
+
+        Scene scene = new Scene(vbox);
+        stage.setScene(scene);
     }
 
     private void chooseClass() {
-        System.out.println("Choose your class: Barbarian, Templar, Wizard, Alchemist, Thief or Ranger");
-        String choice = scnr.next().toLowerCase();
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(20));
 
-        switch (choice) {
-            case "barbarian": player.setPlayerClass(new Barbarian()); break;
-            case "templar": player.setPlayerClass(new Templar()); break;
-            case "wizard": player.setPlayerClass(new Wizard()); break;
-            case "alchemist": player.setPlayerClass(new Alchemist()); break;
-            case "thief": player.setPlayerClass(new Thief()); break;
-            case "ranger": player.setPlayerClass(new Ranger()); break;
-            default: System.out.println("Error, ensure correct spelling."); chooseClass(); return;
-        }
-        player.getPlayerClass().printOriginStory(player);
-        player.getPlayerClass().giveStarterEquipment(player.getInventory());
+        Label label = new Label("Choose your class:");
+        Button barBtn = new Button("Barbarian");
+        Button temBtn = new Button("Templar");
+        Button wizBtn = new Button("Wizard");
+        Button alcBtn = new Button("Alchemist");
+        Button thiBtn = new Button("Thief");
+        Button ranBtn = new Button("Ranger");
+
+        barBtn.setOnAction(e -> setPlayerClass(new Barbarian()));
+        temBtn.setOnAction(e -> setPlayerClass(new Templar()));
+        wizBtn.setOnAction(e -> setPlayerClass(new Wizard()));
+        alcBtn.setOnAction(e -> setPlayerClass(new Alchemist()));
+        thiBtn.setOnAction(e -> setPlayerClass(new Thief()));
+        ranBtn.setOnAction(e -> setPlayerClass(new Ranger()));
+
+        vbox.getChildren().addAll(label, barBtn, temBtn, wizBtn, alcBtn, thiBtn, ranBtn);
+
+        Scene scene = new Scene(vbox);
+        stage.setScene(scene);
 
     }
 
-    private void lockpickMinigame(String difficulty) {
-        LockpickMinigame mini = new LockpickMinigame();
+    private void setPlayerClass(Job job) {
+        player.setPlayerClass(job);
+        player.getPlayerClass().printOriginStory(player, dialogGui, dialog);
+        player.getPlayerClass().giveStarterEquipment(player.getInventory());
+    }
 
-        String playerClass = player.getPlayerClass().getClass().getSimpleName();
-        Inventory inv = player.getInventory();
-
-        System.out.println("\nYou approach a locked chest.");
-
-        boolean success = mini.play(scnr, inv, "Lockpick", playerClass, difficulty);
-
-        if (success) {
-            System.out.println("There's nothing inside!");
-        } else {
-            System.out.println("The chest remains locked.");
-        }
-    } //helper for LockpickMinigame. Will rework eventually
+    public void lockpickMinigame(String difficulty) {
+        LockpickMinigame ui = new LockpickMinigame();
+        ui.pickMinigame(stage, player, difficulty);
+    }
 }

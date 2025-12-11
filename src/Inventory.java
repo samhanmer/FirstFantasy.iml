@@ -11,7 +11,7 @@ public class Inventory {
         return item.getOrDefault(name, 0);
     }
 
-    public void printInventory() {  //planning on implementing soon!
+    /*public void printInventory() {  //planning on implementing soon!
         if (item.isEmpty()) {
             System.out.println("Your inventory is empty.");
             return;
@@ -22,7 +22,7 @@ public class Inventory {
             System.out.println("- " + key + ": " + value);
         });
         System.out.println("|-_______________-|");
-        }
+        } */
 
 
     }
