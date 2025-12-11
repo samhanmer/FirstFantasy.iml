@@ -12,7 +12,6 @@ After that, hit the run button and enjoy! Type answers when prompted. e.g. Enter
 - Branching origin stories and unique dialog for classes using polymorphism
 - Lockpicking minigame with unique class interaction and difficulty levels for future use
 - Functional inventory system that keeps track of names and quantities
-- Can inspect your inventory during dialog scenes by entering -1. This uses recursion
 - Fully functional GUI system
 
 ## Future Improvements
